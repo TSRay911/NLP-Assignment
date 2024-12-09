@@ -1,3 +1,7 @@
-1. venv enviorment 3.13.1
-2. streamlit 
-3. -q -U google-generativeai
+Steps:
+
+1. create venv enviorment 3.13.1
+2. run get-pip.py
+3. install streamlit 
+4. install -q -U google-generativeai
+5. install PyPDF2
