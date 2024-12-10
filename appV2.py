@@ -16,8 +16,50 @@ st.set_page_config(layout="wide")
 st.title("Assignment Chatbot")
 
 with st.sidebar:
+
     st.title("Sidebar")
-    uploadedFiles = st.file_uploader("PDF File Uploader", type="pdf", accept_multiple_files=False)
+
+    #PDF File Uploader
+    with st.form("PDF Form", clear_on_submit=True, border=False):
+        uploadedFiles = st.file_uploader(label="PDF File Uploader", type="pdf", accept_multiple_files=False)
+        
+
+        button_html = """
+        <style>
+            .stFormSubmitButton > button{
+                width: 100%;
+            }
+
+            .stFileUploader > section > button{
+                width: 100%;
+            }
+
+            .stFileUploader > label > div > p{
+                font-size: 1.2em;
+            }
+            
+        </style>
+        """
+        st.markdown(button_html, unsafe_allow_html=True)
+        submitted = st.form_submit_button("Submit")
+
+    # When user press submit and have uploaded files
+    if submitted and uploadedFiles:
+        pdf_reader = PdfReader(uploadedFiles)
+        textContent = ""
+
+        for page in pdf_reader.pages:
+            if page.extract_text() is not None:
+                textContent += page.extract_text() + "\n"
+
+        response = chat.send_message("PDF Upload:\n" + textContent)
+        response = response.text
+
+        st.session_state.messages.append({"role": "human", "content": "PDF Upload"})
+        st.session_state.messages.append({"role": "ai", "content": response})
+
+    #Model Picker
+
 
 # Initialize messages if there is none 
 if "messages" not in st.session_state:
@@ -29,31 +71,6 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-
-# When user upload pdf files
-if uploadedFiles is not None:
-
-    pdf_reader = PdfReader(uploadedFiles)
-    text_content = ""
-
-    for page in pdf_reader.pages:
-        if page.extract_text() is not None:
-            text_content += page.extract_text() + "\n"
-
-    st.session_state.pdf_text = text_content
-
-    with st.chat_message("human"):
-        st.markdown("PDF Upload")
-
-    response = chat.send_message("PDF Upload:\n" + text_content)
-    response = response.text
-
-    with st.chat_message("ai"):
-        st.markdown(response)
-
-    st.session_state.messages.append({"role": "human", "content": "PDF Upload"})
-    st.session_state.messages.append({"role": "ai", "content": response})
-
 
 # When user enter input
 if userInput:= st.chat_input("Message Chatbot"):
@@ -74,7 +91,4 @@ if userInput:= st.chat_input("Message Chatbot"):
 
 
 
-
-
-    
 
