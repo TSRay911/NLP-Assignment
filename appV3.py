@@ -28,6 +28,12 @@ if "chat" not in st.session_state:
         ]
     )
 
+#Display all of the messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["parts"])
+
+
 with st.sidebar:
 
     #Model Picker
@@ -123,7 +129,3 @@ if userInput:=st.chat_input("Message Chatbot"):
     st.session_state.messages.append({"role": "user", "parts": userInput})
     st.session_state.messages.append({"role": "model", "parts": response})
 
-#Display all of the messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["parts"])
