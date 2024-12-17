@@ -1,7 +1,8 @@
 import streamlit as st
-import google.generativeai as genai
 from PyPDF2 import PdfReader
 import shelve
+import google.generativeai as genai
+
 
 genai.configure(api_key="AIzaSyApjjQc7BUbTbTog3W0pJlkzfdAJvvdlao")
 
