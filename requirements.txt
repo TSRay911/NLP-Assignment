@@ -1,4 +1,7 @@
-PyPDF2 
-google-generativeai 
-streamlit 
-
+streamlit
+google-generativeai
+PyPDF2
+nltk
+gTTS
+pygame
+groq
